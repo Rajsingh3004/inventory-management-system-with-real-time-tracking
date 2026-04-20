@@ -59,7 +59,7 @@ def register(user: UserSchema, db: Session = Depends(get_db)):
 def login(login_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == login_data.username).first()
 
-    if not user or not verify_password(login_data.password, user.password):
+    if not user or not verify_password(login_data.password.lower(), user.password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     access_token = create_jwt(data={"sub": user.email, "role": user.role})

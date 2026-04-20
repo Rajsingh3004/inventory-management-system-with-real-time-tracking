@@ -56,6 +56,7 @@
   :items="items" 
   :requests="requests" 
   :sales="sales" 
+  :userRole="userRole" 
 />
             <h1 class="table-title" style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-size: 40px; text-align: center;">Live Inventory</h1>
             <table class="table">
@@ -147,6 +148,7 @@
                 <button class="btn-success" @click="confirmUpdate">Save Changes</button>
                 <button class="btn-secondary" @click="cancelUpdate">Cancel</button>
               </div>
+              
             </div>
           </div>
 
@@ -168,16 +170,22 @@
           <th>Req ID</th>
           <th>Item ID</th> <th>Qty</th>
           <th>Status</th>
+          <th> Total Price</th>
           <th v-if="userRole === 'admin'">Action</th> </tr>
       </thead>
       <tbody>
-        <tr v-for="req in requests" :key="req.id">
+        <tr v-for="req in requests" :key="req.id" >
+         
           <td>#{{ req.id }}</td>
           <td>{{ req.reqitem_id }}</td> <td>{{ req.quantity }}</td>
           <td>
             <span :class="['status-badge', (req.status || 'pending').toLowerCase()]">
               {{ req.status }}
             </span>
+          </td>
+          <td>{{ req.quantity }}</td>
+          <td>
+            ₹{{ calculateTotalPrice(req.reqitem_id, req.quantity) }}  
           </td>
           <td v-if="userRole === 'admin'">
             <div class="action-buttons-mini" v-if="req.status?.toLowerCase() === 'pending'">
@@ -380,10 +388,24 @@ const fetchSales = async () => {
   }
 };
 
+// Function to calculate: req.quantity * item.price
+const calculateTotalPrice = (itemId, quantity) => {
+  // Items list mein se wo item find karein jiska ID match karta ho
+  const item = items.value.find(i => i.id === itemId);
+  
+  if (item) {
+    const total = item.price * quantity;
+    return total.toLocaleString('en-IN'); // Format: 1,500
+  }
+  
+  return '0'; // Agar item na mile
+};
+
 onMounted(() => {
   fetchItems();
   fetchRequests();
-  fetchSales();   // 👈 IMPORTANT
+  fetchSales();   
 });
+
 </script>
 
