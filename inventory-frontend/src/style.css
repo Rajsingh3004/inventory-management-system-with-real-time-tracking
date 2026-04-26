@@ -53,137 +53,203 @@
   background-color: #36c9ba;
 }
 
+/* ===== DASHBOARD SPECIAL ===== */
 
-
-/* --- Global Settings --- */
-* {
-  box-sizing: border-box; /* Yeh zaroori hai taaki inputs/cards na phatain */
-  margin: 0;
-  padding: 0;
-}
-
-:root {
-  --primary: #3b82f6;
-  --bg-dark: #0a0a0c;
-  --panel-bg: #111113;
-  --border: #27272a;
-  --text-main: #e4e4e7;
-  --text-dim: #a1a1aa;
-}
-
-body {
-  font-family: 'Inter', -apple-system, sans-serif;
-  background-color: var(--bg-dark);
-  color: var(--text-main);
-  line-height: 1.6;
-}
-
-/* --- App Layout --- */
-.app-layout {
+.dashboard-container {
   display: flex;
-  height: 100vh;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Charts section */
+.charts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.chart-card {
+  background: white;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: 0.3s;
+}
+
+.chart-card:hover {
+  transform: scale(1.02);
+}
+
+/* Bigger cards look */
+.stat-card {
+  position: relative;
   overflow: hidden;
 }
 
-/* --- Sidebar --- */
+.stat-card::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to right, #3b82f6, #22c55e);
+}
+
+/* Dashboard title spacing */
+.table-title {
+  margin-top: 10px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Scroll for large tables */
+.table-container {
+  overflow-x: auto;
+}
+
+/* Smooth hover effect rows */
+.table tr {
+  transition: 0.2s;
+}
+
+.table tr:hover {
+  background: #eef2ff;
+}
+
+/* Sidebar smooth transition */
+.sidebar-nav li {
+  transition: all 0.3s ease;
+}
+
+/* Buttons hover */
+button:hover {
+  opacity: 0.9;
+}
+
+/* Better input focus */
+input:focus {
+  outline: none;
+  border: 1px solid #3b82f6;
+  box-shadow: 0 0 5px rgba(59,130,246,0.3);
+}
+
+/* ===== GLOBAL ===== */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f4f7fb;
+}
+
+/* ===== LAYOUT ===== */
+.app-layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* ===== SIDEBAR ===== */
 .sidebar {
-  width: 260px;
-  background: var(--panel-bg);
-  border-right: 1px solid var(--border);
+  width: 240px;
+  background: linear-gradient(180deg, #0f172a, #1e293b);
+  color: white;
+  padding: 20px;
+}
+
+.sidebar-header h2 {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar-nav li {
+  padding: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.sidebar-nav li:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.sidebar-nav .active {
+  background: #3b82f6;
+}
+
+/* ===== MAIN ===== */
+.main-wrapper {
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.sidebar-header {
-  padding: 30px 20px;
-  font-weight: 800;
-  color: var(--primary);
-  font-size: 1.4rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.sidebar-nav ul { list-style: none; padding: 15px; }
-.sidebar-nav li {
-  padding: 14px 20px;
-  margin-bottom: 8px;
-  cursor: pointer;
-  border-radius: 8px;
-  color: var(--text-dim);
-  transition: 0.3s;
-  display: flex;
-  align-items: center;
-}
-.sidebar-nav li:hover { background: #18181b; color: #fff; }
-.sidebar-nav li.active { background: var(--primary); color: white; }
-
-/* --- Main Content --- */
-.main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-
 .top-navbar {
-  height: 70px;
-  background: var(--panel-bg);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 30px;
-  background-color: #51aeec;
-  color: #000;
+  background: white;
+  padding: 15px 25px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* ===== CONTENT ===== */
 .main-content {
-  flex: 1;
+  padding: 20px;
   overflow-y: auto;
-  padding: 30px;
-  
 }
 
-/* --- Stats Grid --- */
+/* ===== CARDS ===== */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
   gap: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .stat-card {
-  background: var(--panel-bg);
+  background: white;
   padding: 20px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background-color: #3bb507;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transition: 0.3s;
+  cursor: pointer;
 }
 
-/* --- Form Layout (Alignment Fix) --- */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 25px;
-  background: var(--panel-bg);
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  margin-bottom: 30px;
+.stat-card:hover {
+  transform: translateY(-5px);
 }
 
-input {
-  width: 100%;
-  padding: 12px 15px;
-  background: #0a0a0c;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: white;
-  outline: none;
+.stat-card h3 {
+  margin: 0;
+  color: #555;
 }
 
-input:focus { border-color: var(--primary); }
+.stat-card p {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 10px;
+}
 
-/* --- Table Styling --- */
+/* ===== TABLE ===== */
 .table-container {
-  background: var(--panel-bg);
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  overflow: hidden; /* Rounded corners ke liye */
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  margin-top: 20px;
+}
+
+.table-title {
+  margin-bottom: 15px;
+  font-size: 22px;
 }
 
 .table {
@@ -192,67 +258,363 @@ input:focus { border-color: var(--primary); }
 }
 
 .table th {
-  padding: 18px 20px;
+  background: #f1f5f9;
+  padding: 12px;
   text-align: left;
-  color: var(--text-dim);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  border-bottom: 1px solid var(--border);
-  color: #2563eb;
-  font-weight: bold;
-  font-size: 18px;
 }
 
 .table td {
-  padding: 16px 20px;
-  border-bottom: 1px solid #1a1a1a;
-  color: #ccc;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
 }
 
-.table tr:hover { background: #161618; }
+.table tr:hover {
+  background: #f9fafb;
+}
 
-/* --- Buttons --- */
+/* ===== BUTTONS ===== */
 button {
-  padding: 10px 20px;
+  padding: 8px 12px;
+  border: none;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.btn-add {
+  background: #10b981;
+  color: white;
+}
+
+.btn-delete-small {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-success {
+  background: #22c55e;
+  color: white;
+}
+
+/* ===== LOW STOCK ===== */
+.low-stock-box {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+/* ===== FORM ===== */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+  gap: 10px;
+}
+
+input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* ===== ANIMATION ===== */
+.animate-fade {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+
+/* ===== TOP NAVBAR ===== */
+
+.top-navbar {
+  height: 70px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 25px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Left Title */
+.page-title {
+  font-size: 22px;
   font-weight: 600;
-  border: none;
+  color: #1e293b;
+  letter-spacing: 1px;
+}
+
+/* Right Side */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Profile */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  padding: 6px 12px;
+  border-radius: 30px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* Avatar */
+.avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #22c55e);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Name */
+.user-details .name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.user-details .role {
+  font-size: 12px;
+  color: gray;
+}
+
+/* Hover effect */
+.user-profile:hover {
+  transform: scale(1.03);
   transition: 0.3s;
-  background-color: #15b5dd;
-  margin-top: 10px;
 }
 
-.btn-add { background: var(--primary); color: white; }
-.btn-add:hover { background: #2563eb; }
-
-.btn-delete-small {
-  background: rgba(220, 38, 38, 0.1);
-  color: #f87171;
-  border: 1px solid rgba(220, 38, 38, 0.2);
+/* Optional Search Box */
+.search-box {
+  background: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
 }
-.btn-delete-small:hover { background: #dc2626; color: white; }
+
+.search-box input {
+  border: none;
+  outline: none;
+  padding: 5px;
+}
+
+.menu-btn {
+  font-size: 20px;
+  margin-right: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Sidebar animation */
+.sidebar {
+  width: 240px;
+  transition: all 0.3s ease;
+}
+
+/* Close state */
+.sidebar.closed {
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Smooth main expand */
+.main-wrapper {
+  flex: 1;
+  transition: all 0.3s ease;
+}
+
+/* Sidebar ki width aur transition control karne ke liye */
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  transition: width 0.3s ease;
+  background: #2c3e50; /* Aapka purana color yahan rakhein */
+  overflow: hidden;
+}
+
+/* Jab sidebar band ho toh width kam kar do */
+.sidebar-collapsed .sidebar {
+  width: 70px;
+}
+
+/* Toggle button ki styling */
+.toggle-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: auto;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  justify-content: space-between;
+}
+
+.sidebar-nav ul li {
+  white-space: nowrap; /* Text ko next line pe jaane se rokne ke liye */
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Main wrapper ki width auto-adjust ho */
+.main-wrapper {
+  flex: 1;
+  transition: margin-left 0.3s ease;
+}
+/* Layout Styling */
+.app-layout {
+  display: flex;
+  transition: all 0.3s ease;
+  min-height: 100vh;
+  background: #f4f7f6;
+  overflow-x: hidden;
+}
+
+.main-wrapper {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  padding: 25px;
+  flex: 1;
+}
+
+/* Navbar */
+.top-navbar {
+  background: white;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.nav-toggle-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+/* Table Styling (Jo aapne reverse ki hai) */
+.table-container {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.table th, .table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.status-badge.pending { background: #fff3cd; color: #856404; }
+.status-badge.approved { background: #d4edda; color: #155724; }
+.status-badge.rejected { background: #f8d7da; color: #721c24; }
+
+/* Forms & Cards */
+.manage-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+}
+
+/* Buttons */
+.btn-add, .btn-success, .btn-check {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
 
 .btn-delete-small {
-  background-color: #ff4d4d;
+  background: #e74c3c;
   color: white;
   border: none;
   padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
-  transition: 0.3s;
 }
 
-.btn-delete-small:hover {
-  background-color: #cc0000;
+/* Recent Section (Jo Add/Update ke niche dikhega) */
+.recent-section {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
 }
 
-canvas {
-  background: linear-gradient(145deg, #ffffff, #f3f4f6);
-  transition: transform 0.2s ease;
-}
-
-canvas:hover {
-  transform: translateY(-5px);
+.mini-table {
+  font-size: 13px;
 }

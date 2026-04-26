@@ -7,7 +7,7 @@
   </div>
 </div>
 
-    <div class="chart-card">
+    <div v-if="userRole === 'admin'" class="chart-card">
       <canvas ref="requestChart"></canvas>
     </div>
 

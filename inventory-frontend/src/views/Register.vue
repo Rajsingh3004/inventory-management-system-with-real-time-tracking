@@ -8,7 +8,6 @@
         <input v-model="user.password" type="password" placeholder="Password" required />
         <select v-model="user.role">
           <option value="user">User</option>
-          <option value="admin">Admin</option>
         </select>
         <button type="submit" class="btn-secondary">Register</button>
       </form>
