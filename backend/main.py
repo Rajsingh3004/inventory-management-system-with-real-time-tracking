@@ -92,20 +92,24 @@ def show_items(db: Session = Depends(get_db), current_user: dict = Depends(get_c
 
 # --- REQUEST ENDPOINTS ---
 
-@app.post("/request", tags=["user"])
+@app.post("/request")
 def create_request(request: RequestSchema, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+    
     item = db.query(Item).filter(Item.id == request.reqitem_id).first()
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
-        
+
     new_request = Request(
         reqitem_id=request.reqitem_id,
         quantity=request.quantity,
-        price=item.price, # Item table se price uthao
-        status="pending"
+        price=item.price,
+        status="pending",
+        address=request.address   # ✅ SAVE ADDRESS
     )
+
     db.add(new_request)
     db.commit()
+
     return {"message": "Request submitted successfully"}
 
 @app.put("/update_request/{id}")

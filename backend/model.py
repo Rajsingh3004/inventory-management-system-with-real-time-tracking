@@ -21,7 +21,8 @@ class Request(Base):
     quantity = Column(Integer)
     price = Column(Integer)
     status = Column(String(100), default="pending")
-
+    address = Column(String(100))
+    
 class Sale(Base):
     __tablename__ = "sales"
     id = Column(Integer, primary_key=True, index=True)

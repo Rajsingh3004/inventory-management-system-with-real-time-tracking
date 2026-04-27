@@ -16,11 +16,9 @@ class ItemSchema(BaseModel):
     
 
 class RequestSchema(BaseModel):
-
-    reqitem_id:int
-    quantity:int
-    price:int
-    status:str
+    reqitem_id: int
+    quantity: int
+    address: str   # ✅ NEW
     
 class Login(BaseModel):
     
