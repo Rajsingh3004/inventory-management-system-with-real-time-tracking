@@ -93,23 +93,22 @@ def show_items(db: Session = Depends(get_db), current_user: dict = Depends(get_c
 # --- REQUEST ENDPOINTS ---
 
 @app.post("/request")
-def create_request(request: RequestSchema, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+async def create_request(request: RequestSchema, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     
     item = db.query(Item).filter(Item.id == request.reqitem_id).first()
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
 
     new_request = Request(
-        reqitem_id=request.reqitem_id,
-        quantity=request.quantity,
-        price=item.price,
-        status="pending",
-        address=request.address   # ✅ SAVE ADDRESS
-    )
-
+    reqitem_id=request.reqitem_id,
+    quantity=request.quantity,
+    price=item.price,
+    status="pending",
+    address=request.address,
+   
+)
     db.add(new_request)
     db.commit()
-
     return {"message": "Request submitted successfully"}
 
 @app.put("/update_request/{id}")
@@ -154,73 +153,60 @@ async def update_item(item_id: int, item_data: ItemSchema, db: Session = Depends
 from datetime import datetime
 
 @app.post("/approval/{request_id}", tags=["admin"])
-def request_approval(request_id: int, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+async def request_approval(request_id: int, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+    
     if current_user["role"] != "admin":
         raise HTTPException(status_code=403, detail="Admin access required")
     
-    # 1. Request find karein
+    # 1. Find request
     req = db.query(Request).filter(Request.id == request_id).first()
     if not req:
         raise HTTPException(status_code=404, detail="Request not found")
     
-    # Check karein agar pehle se approved/rejected hai
     if req.status != "pending":
         raise HTTPException(status_code=400, detail="Request already processed")
 
-    # 2. Item check karein
+    # 2. Get item
     item = db.query(Item).filter(Item.id == req.reqitem_id).first()
     if not item:
         raise HTTPException(status_code=404, detail="Item not found") 
 
-    # 3. Stock Check
+    # 3. Get user email from DB
+    user = db.query(User).filter(User.id == req.user_id).first()
+    user_email = user.email if user else None
+
+    # 4. Stock check
     if item.quantity < req.quantity:
         req.status = "rejected"
         db.commit()
-        return {"message": "Insufficient stock, request rejected"}
 
-    # --- LOGIC START: Approval + Auto-Sync to Sales ---
-    
-    # A. Stock update karein
+    # --- APPROVAL LOGIC ---
     item.quantity -= req.quantity
     req.status = "approved"
 
-    # B. Sale table mein entry karein (Current Time aur Week ke saath)
+    from datetime import datetime
     now = datetime.now()
+
     new_sale = Sale(
         request_id=req.id,
         reqitem_id=req.reqitem_id,
         quantity=req.quantity,
         price=req.price,
+        address=req.address,
         created_at=now,
-        week_number=now.isocalendar()[1] # ISO week number nikalta hai (1-52)
+        week_number=now.isocalendar()[1]
     )
-    
+
     db.add(new_sale)
-    
-    # C. Final Commit (Dono table ek saath update honge)
+
     try:
         db.commit()
+
         return {"message": "Request approved and record added to Sales table"}
+
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail="Database error during sync")
-@app.delete("/delete/{item_id}")
-def delete_item(item_id: int, db: Session = Depends(get_db)):
-    db_item = db.query(Item).filter(Item.id == item_id).first()
-    if not db_item:
-        raise HTTPException(status_code=404, detail="Item not found")
-
-    try:
-        db.delete(db_item)
-        db.commit()
-        return {"message": "Item deleted successfully"}
-    except Exception as e:
-        db.rollback()
-        # Yeh error tab aati hai jab Item kisi doosri table mein refer ho raha ho
-        raise HTTPException(
-            status_code=400, 
-            detail="Pehle is item se judi saari Requests aur Sales records delete karein."
-        )
     
 @app.delete("/delete_request/{request_id}", tags=["admin"])
 def delete_request(request_id: int, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):

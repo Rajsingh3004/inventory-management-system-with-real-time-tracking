@@ -30,19 +30,22 @@ def create_jwt(data:dict):
 
 oauth2_scheme=OAuth2PasswordBearer(tokenUrl="login")
 
-def get_current_user(token:str=Depends(oauth2_scheme)):
-   try:
-        payload=jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 
-        email:str=payload.get("sub")
-        role:str=payload.get("role")
+        email: str = payload.get("sub")
+        role: str = payload.get("role")
+        user_id: int = payload.get("id")   # ✅ GET ID
 
         if not email:
-            raise HTTPException(status_code=404,detail="user not found")
+            raise HTTPException(status_code=404, detail="user not found")
         
-        return{
-            "email":email,
-            "role": role
+        return {
+            "sub": email,      # ✅ keep consistent with your main code
+            "role": role,
+            "id": user_id      # ✅ ADD THIS
         }
-   except JWTError:
-       raise HTTPException(status_code=404,detail="Token expire or wrong")
+
+    except JWTError:
+        raise HTTPException(status_code=404, detail="Token expired or invalid")

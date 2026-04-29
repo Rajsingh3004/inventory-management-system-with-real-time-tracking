@@ -22,6 +22,7 @@ class Request(Base):
     price = Column(Integer)
     status = Column(String(100), default="pending")
     address = Column(String(100))
+
     
 class Sale(Base):
     __tablename__ = "sales"
@@ -31,6 +32,7 @@ class Sale(Base):
     reqitem_id = Column(Integer, ForeignKey("items.id", ondelete="CASCADE"))
     quantity = Column(Integer)
     price = Column(Integer)
+    address = Column(String(100))
     created_at = Column(DateTime, default=datetime.now)
     week_number = Column(Integer, default=lambda: datetime.now().isocalendar()[1])
 
